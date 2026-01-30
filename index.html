@@ -12,28 +12,44 @@
 <body>
     <section class="todo__container">
         <div class="todo__wrapper">
-            <form class="todo__topbar">
+            <form class="todo__topbar todo__task__form">
                 <input class="new__task" placeholder="Code for 1 hour" type="text">
                 <button>Add Task</button>
             </form>
         <hr>
             <div class="todos">
+                <div class="none"></div>
                 <!-- <div class="todo__subwrapper">
-                    <div class="todo">
+                  <div class="todo">
                         <input type="checkbox" name="" id="checkbox">
-                        <p class="task">dfsgfdsggfs</p>
+                        <p class="task">${newTaskObj.task}</p>
                     </div>
                 
-                    <div class="delete">
-                        <h1>X</h1></div>
+                    <div class="task__icons">
+                    <i class="uil uil-edit-alt edit"></i>
+                        <i class="uil uil-trash-alt delete"></i>
+                        </div>
                 </div> -->
+
+            </div>
                 
             </div>
 
            
         </div>
 
-        <div class="delete__overlay">
+        <div class="edit__overlay">
+            <form class="edit__form" action="">
+                <!-- <span>Edit</span> -->
+                <label for="Edit">
+<h3>Edit Task</h3>                </label>
+                <input class="edit__input" placeholder="Input new task" type="text">
+                
+                <button type="submit">Edit Task</button>
+            </form>
+        </div>
+
+        <div class="delete__overlay overlay">
                     
                 <div class="delete__enquiry">
                     <h3>Are you sure you want to delete</h3>
