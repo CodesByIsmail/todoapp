@@ -219,7 +219,7 @@ allTasks.forEach(task => {
 
             }, 100)
         
-    }
+    };
 
     newTaskForm.addEventListener('submit', function(e){
         e.preventDefault()
@@ -227,7 +227,7 @@ allTasks.forEach(task => {
         getNewTask()
         newTaskInput.value = ''
         newTaskInput.focus()
-    })
+    });
 }
 
 todoApp()
@@ -235,3 +235,4 @@ todoApp()
 
 // what i just learned:
 // 1. if user is adding an new element to the dom, if the element needs interaction, you will have to add it after creation
+
