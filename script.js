@@ -26,6 +26,7 @@ let todoContainer  =document.querySelector('.todos')
 // });
 
 const allTasks = [];     
+let allCompletedTasks = [];
 
 const todoApp = function(){
 newTaskInput.focus()
@@ -38,12 +39,9 @@ newTaskInput.focus()
          // task.className.has('checked')
     }
 
-    const numOfCheckedTask = function(tasks){
+    const numOfCheckedTask = function(checkbox){
         tasks = Array.from(tasks)
-        const checkedTasks = tasks.filter(task => {
-            // [...task.getAttribute('class')].includes('checked')
-            task.hasAttribute('class')
-        })
+        const checkedTasks = tasks.filter(task => {task.hasAttribute('class')})
         console.log(checkedTasks)
     }
 
@@ -64,24 +62,9 @@ newTaskInput.focus()
     }
 
     const createNewTask = function(newTaskObj){
-        const html = `
-        <!-- <div class="todo__subwrapper" data-id="${newTaskObj.id}">
-        <div class="todo">
-              <input type="checkbox" name="" id="checkbox">
-              <p class="task">${newTaskObj.task}</p>
-          </div>
-      
-          <div class="">
-          <i class="uil uil-edit-alt"></i>
-              <i class="uil uil-trash-alt delete"></i>
-              </div> 
-      </div> -->
-        `
-
-
         // create new div element with new task
         const div  = document.createElement('div');
-      div.innerHTML =
+        div.innerHTML =
          `
                     <div class="todo">
                         <input type="checkbox" name="" id"checkbox">
@@ -104,23 +87,37 @@ newTaskInput.focus()
 
     // todoContainer.innerHTML 
 
-        allTasks.push(newTaskObj);
+        // allTasks.push(newTaskObj);
         console.log(allTasks, 'here');  
 
         clickCheckBtn(div) // receives the newly created div to get input checbox isnside it and make it effective
         
 
-        console.log(todoContainer.querySelector('.todo__subwrapper'))  
+        console.log(todoContainer.querySelector('.todo__subwrapper'));
     }
 
     const clickCheckBtn = function(div){
-        const check = div.querySelector('input'); // Get the input checkbox inside the just created div
+        const checkBox = div.querySelector('input'); // Get the input checkbox inside the just created div
 
         // Add task when check input changes
-        check.addEventListener('change', function(){
-            todoDone(check) // call function to check the task done
-            numOfCheckedTask(allTask)
+        checkBox.addEventListener('change', function(){
+            todoDone(checkBox) // call function to check the task done
+            
+        const checkedTaskId = div.getAttribute('data-id')
+        const checkedTaskObj = allTasks.find(task => +checkedTaskId === task.id)
+        let curTaskStatus = checkedTaskObj.completed;
+        checkedTaskObj.completed = !curTaskStatus
+        console.log(checkedTaskObj)
+        console.log(checkedTaskId)
+
+            addTaskToCompleted(allTasks)
+            // numOfCheckedTask(allTask)
         })
+    }
+
+    const addTaskToCompleted = function(allTasks){
+         allCompletedTasks = allTasks.filter(task => task.completed === true);
+        console.log(allCompletedTasks, 'ALL COMPLETED TASKS')
     }
 
     const getNewTask = function(){
@@ -129,6 +126,8 @@ newTaskInput.focus()
         // create new task from new task input
         newTaskObj.task = newTaskInput.value;
         newTaskObj.id = +((Date.now() + '').slice(-10))
+        newTaskObj.completed = false;
+        allTasks.push(newTaskObj);
 
        createNewTask(newTaskObj);
         const taskIcons = document.querySelector('.task__icons')
@@ -146,16 +145,10 @@ newTaskInput.focus()
 
 
     const editTask = function(e){
-
         // const taskToEdit = e.target.parentElement.parentElement.querySelector('.task') // element to edit
-        const elToEdit = e.target.parentElement.parentElement
-allTasks.forEach(task => {
-    console.log(task.id)
-})
+        let elToEdit = e.target.parentElement.parentElement
+        
         const taskToEdit = allTasks.find(task => task.id === Number(elToEdit.getAttribute('data-id')))
-        // console.log(task.id, Number(elToEdit.getAttribute('data-id')))
-        console.log(taskToEdit, Number(elToEdit.getAttribute('data-id')))
-
         
         editOverlay.style.display = 'block';
         editInput.focus();
@@ -163,63 +156,61 @@ allTasks.forEach(task => {
         editForm.addEventListener('submit', (e)=>{
             e.preventDefault()
             taskToEdit.task = editInput.value;
-            const curTaskEdit = elToEdit.querySelector('.task');
+            let curTaskEdit = elToEdit.querySelector('.task');
             console.log(curTaskEdit, 'hifojflkjsdfhadslfjalidfjadsfjkkljfgslkgf')
             curTaskEdit.textContent = taskToEdit.task
-            editInput.value = ''
             editOverlay.style.display = 'none';
+            console.log(elToEdit)
+            elToEdit = ''
+            console.log(elToEdit)
+            editInput.value = ''
         })
     }
     
 
     const deleteTask = function(e){
-            let elToDelete = e.target.closest('.todo__subwrapper')
-            console.log('delete', elToDelete)
+        let elToDelete = e.target.closest('.todo__subwrapper')
+        console.log('delete', elToDelete)
 
-            setTimeout(function(){
+        setTimeout(function(){
 
-                deleteOverlay.style.display = 'block';
+            deleteOverlay.style.display = 'block';
 
-                deleteEnquiry.style.opacity = 1
-                deleteEnquiry.style.transform = 'translate(-50%, -50%)';
+            deleteEnquiry.style.opacity = 1
+            deleteEnquiry.style.transform = 'translate(-50%, -50%)';
 
 
-                deleteEnquiryInputs.forEach(delSubmit => {
-                    delSubmit.addEventListener('click', function(){
-                        let ask = delSubmit.value;
-                        ask = ask.toLowerCase();
-        
-                        if(ask === 'yes') {
-                            elToDelete.style.transform = 'translateX(100%)'
-                            elToDelete.style.opacity = 0;
-                            console.log(elToDelete.id)
-
-                            const indexOfDeletedElement = allTasks.find(curTask => {
-                                // elToDelete.dataset('id') = curTask.id
-                                console.log(curTask)
-                                console.log(+curTask.id, +elToDelete.id, allTasks)
-
-                            })
-                            console.log(indexOfDeletedElement)
-                            setTimeout(function(){
-                                elToDelete.style.display = 'none'
-                                deleteOverlay.style.display = 'none';
-
-                            }, 200)
-                        };
-
-                        if(ask === 'no') {
+            deleteEnquiryInputs.forEach(delSubmit => {
+                delSubmit.addEventListener('click', function(){
+                    let ask = delSubmit.value;
+                    ask = ask.toLowerCase();
+    
+                    if(ask === 'yes') {
+                        elToDelete.style.transform = 'translateX(100%)'
+                        elToDelete.style.opacity = 0;
+                        const taskIdToDelete = +(elToDelete.getAttribute('data-id'))
+                        const indexOfDeletedElement = allTasks.findIndex(curTask => curTask.id === taskIdToDelete)
+                        console.log(indexOfDeletedElement)
+                        allTasks.splice(indexOfDeletedElement, 1)
+                        setTimeout(function(){
+                            elToDelete.style.display = 'none'
                             deleteOverlay.style.display = 'none';
-                            elToDelete = ''
-                            return
-                        };
-                    })
-                        
-                })
 
-            }, 100)
+                        }, 200)
+                    };
+
+                    if(ask === 'no') {
+                        deleteOverlay.style.display = 'none';
+                        elToDelete = ''
+                        return
+                    };
+                })
+                    
+            })
+
+        }, 100)
         
-    };
+    }
 
     newTaskForm.addEventListener('submit', function(e){
         e.preventDefault()
@@ -227,7 +218,7 @@ allTasks.forEach(task => {
         getNewTask()
         newTaskInput.value = ''
         newTaskInput.focus()
-    });
+    })
 }
 
 todoApp()
@@ -235,4 +226,3 @@ todoApp()
 
 // what i just learned:
 // 1. if user is adding an new element to the dom, if the element needs interaction, you will have to add it after creation
-
