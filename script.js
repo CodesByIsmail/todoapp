@@ -17,8 +17,8 @@ const editOverlay = document.querySelector('.edit__overlay')
 const editForm = document.querySelector('.edit__form')
 const editInput = document.querySelector('.edit__input')
 
-let todoContainer  =document.querySelector('.todos')
-
+let todoContainer  = document.querySelector('.todos')
+const completedContainer = document.querySelector('.completed__tasks')
 
 // todo.forEach(todo => {
 //     const checkbtn = todo.querySelector('input')
@@ -33,16 +33,18 @@ newTaskInput.focus()
 
     const done = function(task){
         task.classList.toggle('checked')
-         // Get closest task to the checkbox
+        // Get closest task to the checkbox
         console.log(task.getAttribute('class'))
-
-         // task.className.has('checked')
+        
+        // task.className.has('checked')
     }
-
-    const numOfCheckedTask = function(checkbox){
-        tasks = Array.from(tasks)
-        const checkedTasks = tasks.filter(task => {task.hasAttribute('class')})
-        console.log(checkedTasks)
+    
+    const numOfCheckedTask = function(){
+        const totalTask = allTasks.length;
+        const totalCompleted = allCompletedTasks.length;
+        
+        const numTaskCompleted = document.querySelector('.num__task__completed')
+        numTaskCompleted.textContent = `${totalCompleted} / ${totalTask}`
     }
 
     const getClosestTask = function(check){
@@ -61,13 +63,13 @@ newTaskInput.focus()
             // Increase the number of checked class
     }
 
-    const createNewTask = function(newTaskObj){
+    const createNewTask = function(container, newTaskObj, className){
         // create new div element with new task
         const div  = document.createElement('div');
         div.innerHTML =
          `
                     <div class="todo">
-                        <input type="checkbox" name="" id"checkbox">
+                        <input type="checkbox" id"checkbox">
                         <p class="task">${newTaskObj.task}</p>
                     </div>
                     
@@ -78,11 +80,11 @@ newTaskInput.focus()
                 </div>
         `;
             
-        div.className = 'todo__subwrapper' // add 'todo' class to div created
+        div.classList.add(className) // add 'todo' class to div created
         // div.dataset('id') = newTaskObj.id
         // div.dataset('id') = newTaskObj.id
         div.setAttribute('data-id', newTaskObj.id)
-        todoContainer.prepend(div)
+        container.prepend(div)
 
 
     // todoContainer.innerHTML 
@@ -94,6 +96,8 @@ newTaskInput.focus()
         
 
         console.log(todoContainer.querySelector('.todo__subwrapper'));
+        trimTask(div)
+        return div;
     }
 
     const clickCheckBtn = function(div){
@@ -106,18 +110,32 @@ newTaskInput.focus()
         const checkedTaskId = div.getAttribute('data-id')
         const checkedTaskObj = allTasks.find(task => +checkedTaskId === task.id)
         let curTaskStatus = checkedTaskObj.completed;
-        checkedTaskObj.completed = !curTaskStatus
+        checkedTaskObj.completed = !curTaskStatus;
+        setTimeout(()=>{
+            div.remove()
+        }, 300)
         console.log(checkedTaskObj)
         console.log(checkedTaskId)
-
-            addTaskToCompleted(allTasks)
+            addTaskToCompleted(checkedTaskObj);
+numOfCheckedTask(); 
             // numOfCheckedTask(allTask)
         })
     }
 
-    const addTaskToCompleted = function(allTasks){
-         allCompletedTasks = allTasks.filter(task => task.completed === true);
+    const addTaskToCompleted = function(checkedTask){
+        
+        allCompletedTasks = allTasks.filter(task => task.completed === true);
         console.log(allCompletedTasks, 'ALL COMPLETED TASKS')
+
+        // createNewTask(completedContainer, checkedTask, 'todo__subwrapper__checked').querySelector('input').remove()
+        const checkedTaskDiv = createNewTask(completedContainer, checkedTask, 'todo__subwrapper__checked')
+        checkedTaskDiv.querySelector('input').remove()
+        checkedTaskDiv.querySelector('.task__icons').innerHTML = '<i class="uil uil-check-circle"></i>'
+        checkedTaskDiv.querySelector('.task').classList.add('checked')
+
+        // allCompletedTasks.forEach(task => {
+        //     createNewTask(completedContainer, task, 'todo__subwrapper__checked').querySelector('input').remove()
+        // })        
     }
 
     const getNewTask = function(){
@@ -129,7 +147,7 @@ newTaskInput.focus()
         newTaskObj.completed = false;
         allTasks.push(newTaskObj);
 
-       createNewTask(newTaskObj);
+       createNewTask(todoContainer, newTaskObj, 'todo__subwrapper');
         const taskIcons = document.querySelector('.task__icons')
         taskIcons.addEventListener('click', function(e){
 
@@ -212,12 +230,23 @@ newTaskInput.focus()
         
     }
 
+    function trimTask (div){
+        const taskWord = div.querySelector('.task')
+        let taskWordLength = taskWord.textContent.length;
+        console.log(taskWordLength, 'hdfkafdkhakfhasdfhkajsdjhfkjadh')
+        const maxLength = 10;
+        if (taskWordLength > maxLength) {
+            taskWord.textContent = `${taskWord.textContent.slice(0, maxLength)}...`
+        }
+    }
+
     newTaskForm.addEventListener('submit', function(e){
         e.preventDefault()
         if(!newTaskInput.value.trim()) return
         getNewTask()
         newTaskInput.value = ''
         newTaskInput.focus()
+        numOfCheckedTask();
     })
 }
 
