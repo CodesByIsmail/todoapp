@@ -1,1 +1,87 @@
-<!DOCTYPE html>\n<html lang="en">\n<head>\n    <meta charset="UTF-8">\n    <meta http-equiv="X-UA-Compatible" content="IE=edge">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <title>Todo App</title>\n    <link rel="stylesheet" href="styles.css">\n</head>\n<body>\n    <!-- Header Section -->\n    <header>\n        <h1>My Todo List</h1>\n    </header>\n    \n    <!-- Main Section -->\n    <main>\n        <ul id="todo-list">\n            <!-- List Items will be added here -->\n        </ul>\n        <input type="text" id="todo-input" placeholder="Add a new task">\n        <button id="add-todo">Add</button>\n    </main>\n    \n    <!-- Footer Section -->\n    <footer>\n        <p>&copy; 2026 Todo App</p>\n    </footer>\n    <script src="script.js"></script>\n</body>\n</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To do App</title>
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.2.0/css/line.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <section class="todo__container">
+        <div class="todo__wrapper">
+            <form class="todo__topbar todo__task__form">
+                <input class="new__task" placeholder="Code for 1 hour" type="text">
+                <button><i class="uil uil-plus"></i></button>
+            </form>
+            <div class="todos">
+                <div class="none"></div>
+                <!-- <div class="todo__subwrapper">
+                  <div class="todo">
+                        <input type="checkbox" name="" id="checkbox">
+                        <p class="task">${newTaskObj.task}</p>
+                    </div>
+                
+                    <div class="task__icons">
+                    <i class="uil uil-edit-alt edit"></i>
+                        <i class="uil uil-trash-alt delete"></i>
+                        </div>
+                </div> -->
+
+            </div>
+
+            <div class="completed__tasks__container">
+                <div class="completed__heading">
+                    <h5>Completed Tasks</h5>       
+                    <span class="num__task__completed">0 / 0</span>
+                    <button><i class="uil uil-angle-down"></i></button>
+                </div>
+
+
+                <div class="completed__tasks">
+                    <!-- <div class="todo__subwrapper__checked" data-id="459857828">
+                        <div class="todo">
+                            <p class="task checked">Coding</p>
+                        </div>
+                        
+                        <div class="task__icons">
+                            <i class="uil uil-edit-alt edit"></i>
+                            <i class="uil uil-trash-alt delete"></i>
+                        </div>
+                    </div> -->
+                </div>
+                </div>
+                </div>
+            </div>
+            </div>
+
+        </div>
+
+        <div class="edit__overlay">
+            <form class="edit__form" action="">
+                <!-- <span>Edit</span> -->
+                <label for="Edit">
+<h3>Edit Task</h3>                </label>
+                <input class="edit__input" placeholder="Input new task" type="text">
+
+                <button type="submit">Edit Task</button>
+            </form>
+        </div>
+
+        <div class="delete__overlay overlay">
+
+                <div class="delete__enquiry">
+                    <h3>Are you sure you want to delete</h3>
+                    <div class="yes__no">
+        <input class="del__enquiry__yes btn" type="submit" value="Yes">
+        <input class="del__enquiry__no btn" type="submit" value="No">
+
+                    </div>
+                </div>
+        </div>
+    </section>
+
+</body>
+</html>
